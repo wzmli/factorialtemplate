@@ -76,6 +76,8 @@ $(foreach fit,$(FITS),\
 
 allmodels: $(ALLMODELS)
 
+MODSN := $(words $(ALLMODELS))
+
 clean-models:
 	rm *.model
 
@@ -112,8 +114,10 @@ pmem := 4gb
 # depends on what simulators are
 mods := module load gcc/5.2.0 R/3.2.2;
 
+run-with-pbs = (export WALLTIME="$(walltime)"; export NODES="$(nodes)"; export CORES="$(cores)"; export PMEM="$(pmem)"; export MODS="$(mods)"; $(1))
+
 run_%.pbs: write-run-one-pbs.sh %.model .myhpc $(SAMPS)
-	(export WALLTIME="$(walltime)"; export NODES="$(nodes)"; export CORES="$(cores)"; export PMEM="$(pmem)"; export MODS="$(mods)"; ./$< $@ $* $(SAMPN))
+	$(call run-with-pbs,./$< $@ $* $(SAMPN))
 
 allfactorspbs: $(subst model,pbs,$(subst factor,run,$(ALLMODELS)))
 
@@ -135,6 +139,9 @@ pbs-params.csv: $(ALLMODELS) $(SAMPS)
 	$(foreach sample,$(basename $(notdir $(SAMPS))),\
 	$(call param-insert,make result/$(model).$(sample).out,$@)\
 	))
+
+allruns.pbs: write-run-all-pbs.sh pbs-params.csv
+	$(call run-with-pbs,./$^ $@ allruns $$(($(SAMPN)*$(MODSN))))
 
 .SECONDEXPANSION:
 
