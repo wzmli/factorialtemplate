@@ -62,10 +62,28 @@ $(foreach fit,$(FITS),\
 
 allmodels: $(ALLMODELS)
 
+# force user to setup some local environmental variables
+# used as defaults in pbs scripts
+.myhpc:
+	./setup.sh $@
+
 # now that we have all the rules, we want a supercomputer script
 # that will invoke them all as part of an torque array job (assuming qsub infrastructure)
 # we need to generate (1) that script and (2) the series of inputs that depend on $PBS_ARRAYID
 
-run.pbs pbs-params.csv: $(FITS) $(OBSS) $(PROS)
+run.pbs: $(FITS) $(OBSS) $(PROS) .myhpc pbs-params.csv
+	./write-pbs.sh $@
 	@echo write param input file from script
 	@echo write pbs file from script
+
+.SECONDEXPANSION:
+
+# now we need to map our factorial model combinations to outputs
+# here, we just need to match to (1) model combination and (2) sample
+# so we can use secondary expansion to parse %
+
+results:
+	mkdir $@
+
+results/%.out: factor_$$(basename $$*).model samples/$$(subst .,,$$(suffix $$*)).in | results
+	@echo $@ depends on $^
