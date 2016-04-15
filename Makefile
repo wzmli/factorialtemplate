@@ -1,6 +1,6 @@
 ## Hooks
 
-target: allfactorspbs
+target: allruns.pbs 
 
 # some convenient definitions
 
@@ -121,7 +121,7 @@ run-with-pbs = (export WALLTIME="$(walltime)"; export NODES="$(nodes)"; export C
 run_%.pbs: write-run-one-pbs.sh %.$(BUG) .myhpc $(SAMPS)
 	$(call run-with-pbs,./$< $@ $* $(SAMPN))
 
-allfactorspbs: $(subst model,pbs,$(subst factor,run,$(ALLMODELS)))
+allfactorspbs: $(subst $(BUG),pbs,$(addprefix run_,$(ALLMODELS)))
 
 clean-pbs:
 	rm *.pbs
