@@ -1,3 +1,7 @@
+## Hooks
+
+target: run.pbs 
+
 # some convenient definitions
 
 EMPTY :=
