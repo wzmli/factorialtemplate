@@ -22,6 +22,15 @@ FITS := $(wildcard $(FITDIR)/*)
 OBSS := $(wildcard $(OBSDIR)/*)
 PROS := $(wildcard $(PRODIR)/*)
 
+# we also have various samples we want to consider in each of these
+# factorial dimensions.  these are another dimension in some sense,
+# but since we use them in a fundamentally different way we will
+# treat them seperately
+
+SAMPDIR := samples
+SAMPS := $(wildcard $(SAMPDIR)/*)
+SAMPN := $(words $(SAMPS))
+
 # our factorial combination inputs are each a file
 # and the file names include each dimension value as part of the name
 # i.e., 'factor_DIM1VAL_DIM2VAL_DIM3VAL.model'
@@ -77,12 +86,39 @@ pbs-params.csv:
 
 # now that we have all the rules, we want a supercomputer script
 # that will invoke them all as part of an torque array job (assuming qsub infrastructure)
-# we need to generate (1) that script and (2) the series of inputs that depend on $PBS_ARRAYID
+# we need to generate (1) that script and (2) the series of inputs/invocations
+# that depend on $PBS_ARRAYID
 
-run.pbs: $(FITS) $(OBSS) $(PROS) .myhpc pbs-params.csv
-	./write-pbs.sh $@
-	@echo write param input file from script
-	@echo write pbs file from script
+# one approach: have a pbs run for each component in the factorial design.
+# upside: can have tailored resource requirements for runs
+# downside: ...tailored resource requirements for runs (as in, user has to provide all of
+# them individually).  however, we can just take a "defaults" approach and use make arguments to
+# override them.
+# another advantage to this approach: $PBS_ARRAYID is used w/ the sample #s
+# this is really useful for looking up jobs: you have jobname which
+# tells you factor combination + array id within job telling you sample id
+
+# convention: use lowercase make variables to correspond to values we expect to sometimes
+# override
+
+# probably way to generous for single factor, single sample calc
+walltime := 12:00:00
+# assumes a single factor & sample is not multinode
+nodes := 1
+# ...but may support multithread
+cores := 4
+# not a big mem footprint, but not small either
+pmem := 4gb
+# depends on what simulators are
+mods := module load gcc/5.2.0 R/3.2.2;
+
+run_%.pbs: write-run-one-pbs.sh factor_%.model .myhpc $(SAMPS)
+	(export WALLTIME="$(walltime)"; export NODES="$(nodes)"; export CORES="$(cores)"; export PMEM="$(pmem)"; export MODS="$(mods)"; ./$< $@ $* $(SAMPN))
+
+allfactorspbs: $(subst model,pbs,$(subst factor,run,$(ALLMODELS)))
+
+cleanpbs:
+	rm *.pbs
 
 results:
 	mkdir $@
