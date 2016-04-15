@@ -33,10 +33,10 @@ SAMPN := $(words $(SAMPS))
 
 # our factorial combination inputs are each a file
 # and the file names include each dimension value as part of the name
-# i.e., 'factor_DIM1VAL_DIM2VAL_DIM3VAL.model'
+# i.e., 'DIM1VAL_DIM2VAL_DIM3VAL.model'
 # we make that naming easy to use (and enforce) by defining a function for it
 
-model-filename = factor_$(subst $(SPACE),_,$(basename $(notdir $(1) $(2) $(3)))).model
+model-filename = $(subst $(SPACE),_,$(basename $(notdir $(1) $(2) $(3)))).model
 
 # finally we want to dynamically generate a rule for each target
 # it would be nice to use pattern rules, but matching multiple patterns
@@ -47,7 +47,8 @@ model-filename = factor_$(subst $(SPACE),_,$(basename $(notdir $(1) $(2) $(3))))
 
 define model-template
 $(call model-filename,$(1),$(2),$(3)): $(1) $(2) $(3)
-	@echo $$@ depends on $$^
+	@echo change to do something with $$^
+	touch $$@
 
 ALLMODELS += $(call model-filename,$(1),$(2),$(3))
 
@@ -74,6 +75,9 @@ $(foreach fit,$(FITS),\
 )))
 
 allmodels: $(ALLMODELS)
+
+clean-models:
+	rm *.model
 
 # force user to setup some local environmental variables
 # used as defaults in pbs scripts
@@ -108,12 +112,12 @@ pmem := 4gb
 # depends on what simulators are
 mods := module load gcc/5.2.0 R/3.2.2;
 
-run_%.pbs: write-run-one-pbs.sh factor_%.model .myhpc $(SAMPS)
+run_%.pbs: write-run-one-pbs.sh %.model .myhpc $(SAMPS)
 	(export WALLTIME="$(walltime)"; export NODES="$(nodes)"; export CORES="$(cores)"; export PMEM="$(pmem)"; export MODS="$(mods)"; ./$< $@ $* $(SAMPN))
 
 allfactorspbs: $(subst model,pbs,$(subst factor,run,$(ALLMODELS)))
 
-cleanpbs:
+clean-pbs:
 	rm *.pbs
 
 results:
@@ -121,10 +125,16 @@ results:
 
 # stub for alt pbs approach
 
-pbs-params.csv:
-	@echo make pbs-params appropriately
-	touch $@
+define param-insert
+@echo $(1) >> $(2)
 
+endef
+
+pbs-params.csv: $(ALLMODELS) $(SAMPS)
+	$(foreach model,$(basename $(notdir $(ALLMODELS))),\
+	$(foreach sample,$(basename $(notdir $(SAMPS))),\
+	$(call param-insert,make result/$(model).$(sample).out,$@)\
+	))
 
 .SECONDEXPANSION:
 
@@ -132,5 +142,5 @@ pbs-params.csv:
 # here, we just need to match to (1) model combination and (2) sample
 # so we can use secondary expansion to parse %
 
-results/%.out: factor_$$(basename $$*).model samples/$$(subst .,,$$(suffix $$*)).in | results
+results/%.out: $$(basename $$*).model samples/$$(subst .,,$$(suffix $$*)).in | results
 	@echo $@ depends on $^
