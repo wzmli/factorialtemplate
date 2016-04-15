@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 source ./.myhpc
 echo "wall time (hhh:mm:ss, with hs and ms optional)?"
 read WALLTIME
@@ -10,10 +10,9 @@ echo "process memory? (per core [again, not for the whole thing])"
 read PMEM
 echo "modules (i.e. gcc/VERSION R/VERSION)? [enter all on one line, or enter for no modules]"
 read MODS
-if [ -z $MODS ] then
+if [ -n $MODS ]; then
   MODS=module load $MODS
 fi
-
 cat > $1 <<EOF
 #!/bin/bash
 #PBS -r y
