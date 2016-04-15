@@ -1,6 +1,6 @@
 ## Hooks
 
-target: run.pbs 
+target: allfactorspbs
 
 # some convenient definitions
 
@@ -80,10 +80,6 @@ allmodels: $(ALLMODELS)
 .myhpc:
 	./setup.sh $@
 
-pbs-params.csv:
-	@echo make pbs-params appropriately
-	touch $@
-
 # now that we have all the rules, we want a supercomputer script
 # that will invoke them all as part of an torque array job (assuming qsub infrastructure)
 # we need to generate (1) that script and (2) the series of inputs/invocations
@@ -122,6 +118,13 @@ cleanpbs:
 
 results:
 	mkdir $@
+
+# stub for alt pbs approach
+
+pbs-params.csv:
+	@echo make pbs-params appropriately
+	touch $@
+
 
 .SECONDEXPANSION:
 
