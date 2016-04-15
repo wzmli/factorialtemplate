@@ -1,4 +1,4 @@
-#!/bin/usr/bash
+#!/bin/bash
 echo "what email do you want to use for job notifications (i.e., for -M you@domain.tld)?"
 read hpc_email
 echo "what notifications do you want (i.e., for -m; use some of [abe] or 'n')?"
