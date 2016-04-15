@@ -6,6 +6,8 @@ target: allfactorspbs
 
 EMPTY :=
 SPACE := $(EMPTY) $(EMPTY)
+BUG := bug
+
 
 # so we have one directory per factorial dimension
 # could, BUT DO NOT WANT TO, have `make` dynamically figure these out
@@ -33,10 +35,10 @@ SAMPN := $(words $(SAMPS))
 
 # our factorial combination inputs are each a file
 # and the file names include each dimension value as part of the name
-# i.e., 'DIM1VAL_DIM2VAL_DIM3VAL.model'
+# i.e., 'DIM1VAL_DIM2VAL_DIM3VAL.$(BUG)'
 # we make that naming easy to use (and enforce) by defining a function for it
 
-model-filename = $(subst $(SPACE),_,$(basename $(notdir $(1) $(2) $(3)))).model
+model-filename = $(subst $(SPACE),_,$(basename $(notdir $(1) $(2) $(3)))).$(BUG)
 
 # finally we want to dynamically generate a rule for each target
 # it would be nice to use pattern rules, but matching multiple patterns
@@ -79,7 +81,7 @@ allmodels: $(ALLMODELS)
 MODSN := $(words $(ALLMODELS))
 
 clean-models:
-	rm *.model
+	rm *.$(BUG)
 
 # force user to setup some local environmental variables
 # used as defaults in pbs scripts
@@ -116,7 +118,7 @@ mods := module load gcc/5.2.0 R/3.2.2;
 
 run-with-pbs = (export WALLTIME="$(walltime)"; export NODES="$(nodes)"; export CORES="$(cores)"; export PMEM="$(pmem)"; export MODS="$(mods)"; $(1))
 
-run_%.pbs: write-run-one-pbs.sh %.model .myhpc $(SAMPS)
+run_%.pbs: write-run-one-pbs.sh %.$(BUG) .myhpc $(SAMPS)
 	$(call run-with-pbs,./$< $@ $* $(SAMPN))
 
 allfactorspbs: $(subst model,pbs,$(subst factor,run,$(ALLMODELS)))
@@ -149,5 +151,5 @@ allruns.pbs: write-run-all-pbs.sh pbs-params.csv
 # here, we just need to match to (1) model combination and (2) sample
 # so we can use secondary expansion to parse %
 
-results/%.out: $$(basename $$*).model samples/$$(subst .,,$$(suffix $$*)).in | results
+results/%.out: $$(basename $$*).$(BUG) samples/$$(subst .,,$$(suffix $$*)).in | results
 	@echo $@ depends on $^
