@@ -1,6 +1,6 @@
 ## Hooks
 
-target: allruns.pbs 
+target: allruns.pbs
 
 # some convenient definitions
 
@@ -23,6 +23,16 @@ PRODIR := process
 FITS := $(wildcard $(FITDIR)/*)
 OBSS := $(wildcard $(OBSDIR)/*)
 PROS := $(wildcard $(PRODIR)/*)
+
+R := /usr/bin/env Rscript
+
+# this file has all the legal combinations, written as
+# A_B_C B_B_2
+# i.e., the actual assembled file names, space separated
+# its made by feeding the forbidden combinations (forbidden.csv)
+# and the directories to a combination building script
+combinations.txt: combinato.R forbidden.csv $(FITS) $(OBSS) $(PROS) |
+	$(R) $^ > $@
 
 # we also have various samples we want to consider in each of these
 # factorial dimensions.  these are another dimension in some sense,
@@ -56,6 +66,16 @@ ALLMODELS += $(call model-filename,$(1),$(2),$(3))
 
 endef
 
+# using filtered factorial instead
+define model-template-filtered
+$(1).$(BUG): $(join $(DOSOMETHINGTOSRCDIRS),$(strsplit _,$(1)))
+	@echo change to do something with $$^
+	touch $$@
+
+ALLMODELS += $(1).$(BUG)
+
+endef
+
 # now we apply our rule generation template to all combinations
 # of all factor dimensions: nested foreach loops, one level
 # for each dimension, and an innermost invocation of template
@@ -70,11 +90,14 @@ endef
 # a to-be-included .mk file which is (re)built based on
 # directory contents, then always included?
 
-$(foreach fit,$(FITS),\
- $(foreach obs,$(OBSS),\
-  $(foreach pro,$(PROS),\
-   $(eval $(call model-template,$(fit),$(obs),$(pro)))\
-)))
+# TODO define this, so it there can be a single line comment / switch
+# $(foreach fit,$(FITS),\
+#  $(foreach obs,$(OBSS),\
+#   $(foreach pro,$(PROS),\
+#    $(eval $(call model-template,$(fit),$(obs),$(pro)))\
+# )))
+
+$(foreach combo,$(shell cat combinations.txt),$(info $(call model-template-filtered,$(combo))))
 
 allmodels: $(ALLMODELS)
 

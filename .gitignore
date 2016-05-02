@@ -2,3 +2,5 @@
 *.pbs
 *.model
 pbs-params.csv
+.Rproj.user
+combinations.txt
