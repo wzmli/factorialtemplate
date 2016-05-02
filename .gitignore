@@ -1,6 +1,7 @@
 .myhpc
 *.pbs
 *.model
+*.bug
 pbs-params.csv
 .Rproj.user
 combinations.txt

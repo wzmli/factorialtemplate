@@ -8,14 +8,17 @@ EMPTY :=
 SPACE := $(EMPTY) $(EMPTY)
 BUG := bug
 
-
 # so we have one directory per factorial dimension
 # could, BUT DO NOT WANT TO, have `make` dynamically figure these out
 # do not want b/c: transparency
+# slight walkback: would be useful to have a dimensions dir, with
+# each dimension a sub dir
 
 FITDIR := fitting
 OBSDIR := observation
 PRODIR := process
+
+DIMDIRS := $(FITDIR) $(OBSDIR) $(PRODIR)
 
 # we want to dependencies related to all of the points in those dimensions
 # and we track those points with a file for each
@@ -31,7 +34,7 @@ R := /usr/bin/env Rscript
 # i.e., the actual assembled file names, space separated
 # its made by feeding the forbidden combinations (forbidden.csv)
 # and the directories to a combination building script
-combinations.txt: combinato.R forbidden.csv $(FITS) $(OBSS) $(PROS) |
+combinations.txt: combinato.R forbidden.csv $(FITS) $(OBSS) $(PROS)
 	$(R) $^ > $@
 
 # we also have various samples we want to consider in each of these
@@ -68,7 +71,7 @@ endef
 
 # using filtered factorial instead
 define model-template-filtered
-$(1).$(BUG): $(join $(DOSOMETHINGTOSRCDIRS),$(strsplit _,$(1)))
+$(1).$(BUG): $(addsuffix .fct,$(join $(DIMDIRS),$(addprefix /,$(subst _, ,$(1)))))
 	@echo change to do something with $$^
 	touch $$@
 
@@ -97,9 +100,9 @@ endef
 #    $(eval $(call model-template,$(fit),$(obs),$(pro)))\
 # )))
 
-$(foreach combo,$(shell cat combinations.txt),$(info $(call model-template-filtered,$(combo))))
+$(foreach combo,$(shell cat combinations.txt),$(eval $(call model-template-filtered,$(combo))))
 
-allmodels: $(ALLMODELS)
+allmodels: combinations.txt $(ALLMODELS)
 
 MODSN := $(words $(ALLMODELS))
 
@@ -159,7 +162,7 @@ define param-insert
 
 endef
 
-pbs-params.csv: $(ALLMODELS) $(SAMPS)
+pbs-params.csv: allmodels $(SAMPS)
 	$(foreach model,$(basename $(notdir $(ALLMODELS))),\
 	$(foreach sample,$(basename $(notdir $(SAMPS))),\
 	$(call param-insert,make result/$(model).$(sample).out,$@)\
