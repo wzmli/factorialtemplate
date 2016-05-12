@@ -2,9 +2,9 @@ rm(list=ls())
 require(data.table)
 
 # receive forbidden, all files to source for combinations
-## for development
+# for development
 # args <- strsplit(
-#  "forbidden.csv fitting/A.fct fitting/B.fct observation/A.fct observation/B.fct observation/C.fct observation/noisy.fct observation/proportional.fct process/A.fct process/B.fct process/discrete.fct process/hybrid.fct",
+#  "forbidden.csv fitting/B.R fitting/P.R observation/B.R observation/P.R",
 #  split=" "
 # )[[1]]
 args <- commandArgs(trailingOnly = T)

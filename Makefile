@@ -61,23 +61,21 @@ model-filename = $(subst $(SPACE),_,$(basename $(notdir $(1) $(2) $(3)))).$(BUG)
 # so we can append to such a variable every time a new rule is written
 
 define model-template
-$(call model-filename,$(1),$(2),$(3)): $(1) $(2) $(3)
-	@echo change to do something with $$^
-	touch $$@
+$(call model-filename,$(1),$(2),$(3)): $(1) $(2) $(3) bugstemp.R
+	$(R) bugstemp.R $@
 
 ALLMODELS += $(call model-filename,$(1),$(2),$(3))
 
 endef
 
 # using filtered factorial instead
-define model-template-filtered
-$(1).$(BUG): $(addsuffix .fct,$(join $(DIMDIRS),$(addprefix /,$(subst _, ,$(1)))))
-	@echo change to do something with $$^
-	touch $$@
+#define model-template-filtered
+#$(1).$(BUG): bugstemp.R $(addsuffix .R,$(join $(DIMDIRS),$(addprefix /,$(subst _, ,$(1))))) $(1) 
+#	     $(R) $^ bugstemp.R $@
 
-ALLMODELS += $(1).$(BUG)
+#ALLMODELS += $(1).$(BUG)
 
-endef
+#endef
 
 # now we apply our rule generation template to all combinations
 # of all factor dimensions: nested foreach loops, one level
