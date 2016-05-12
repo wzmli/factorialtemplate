@@ -71,7 +71,7 @@ endef
 
 # using filtered factorial instead
 define model-template-filtered
-$(1).$(BUG): $(addsuffix .fct,$(join $(DIMDIRS),$(addprefix /,$(subst _, ,$(1)))))
+$(1).$(BUG): $(addsuffix .R,$(join $(DIMDIRS),$(addprefix /,$(subst _, ,$(1)))))
 	@echo change to do something with $$^
 	touch $$@
 
