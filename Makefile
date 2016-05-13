@@ -62,7 +62,7 @@ model-filename = $(subst $(SPACE),_,$(basename $(notdir $(1) $(2) $(3)))).$(BUG)
 
 define model-template
 $(call model-filename,$(1),$(2),$(3)): $(1) $(2) $(3)
-	@echo change to do something with $$^
+	@$(R) $$^ bugstemp.R
 	touch $$@
 
 ALLMODELS += $(call model-filename,$(1),$(2),$(3))
@@ -71,9 +71,8 @@ endef
 
 # using filtered factorial instead
 define model-template-filtered
-$(1).$(BUG): $(addsuffix .R,$(join $(DIMDIRS),$(addprefix /,$(subst _, ,$(1)))))
-	@echo change to do something with $$^
-	touch $$@
+$(1).$(BUG): $(addsuffix .R,$(join $(DIMDIRS),$(addprefix /,$(subst _, ,$(1))))) bugstemp.R
+	     $(R) $$^ > $$@
 
 ALLMODELS += $(1).$(BUG)
 
@@ -179,3 +178,4 @@ allruns.pbs: write-run-all-pbs.sh pbs-params.csv
 
 results/%.out: $$(basename $$*).$(BUG) samples/$$(subst .,,$$(suffix $$*)).in | results
 	@echo $@ depends on $^
+

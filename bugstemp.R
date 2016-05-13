@@ -22,7 +22,7 @@ S <- c("
 iterloop <- c("for(t in 2:numobs){","}")
 
 ## Jags bugs script
-(cat("model{"
+cat("model{"
      , priors
      , process[2]
      , S[1]
@@ -32,6 +32,8 @@ iterloop <- c("for(t in 2:numobs){","}")
      , S[2]
      , observation[3]
      , iterloop[2]
-     , "}")
+     , "}"
+     # , file=paste("jags_",process[1],"_",observation[1],".bug",sep=""))
 )
+
 

@@ -5,8 +5,6 @@ process <- c("P"
   I[1] ~ dpois(IMean[1])
   "
   , 
-#  "for(t in 2:numobs){
   " IMean[t] <- (1 - exp(I[t-1]*log(beta)))*S[t-1]
     I[t] ~ dpois(IMean[t])"
-#  }
 )

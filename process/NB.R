@@ -7,11 +7,9 @@ process <- c("NB"
 	pSI[1] <- 1 - exp(I[1]*log(beta))
   "
   , 
-  #  "for(t in 2:numobs){
   "
   IMean[t] ~ dgamma(Pdis,Pdis/(pSI[t-1]*S[t-1] + eps))
   I[t] ~ dpois(IMean[t])
   pSI[t] <- 1 - exp(I[t]*log(beta))
   "
-             #  }"
 )

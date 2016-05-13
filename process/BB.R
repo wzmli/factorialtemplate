@@ -7,11 +7,9 @@ process <- c("BB"
 	pSIb[1] ~ dgamma(pSISize/(pSI[1]),1)
   "
   , 
-#  "for(t in 2:numobs){
   "I[t] ~ dbin(pSIa[t-1]/(pSIa[t-1]+pSIb[t-1]),S[t-1])
   pSI[t] <- 1 - exp(I[t]*log(beta))+eps
 	pSIa[t] ~ dgamma(pSISize/(1-pSI[t]),1)
 	pSIb[t] ~ dgamma(pSISize/(pSI[t]),1)
 "
-#}"
 )
