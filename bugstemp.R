@@ -1,7 +1,8 @@
 # args <- c("fitting/jags.R", "observation/NB.R", "process/P.R")
 
 args <- commandArgs(trailingOnly = T)
-sapply(args, source)
+source(args[2])
+source(args[3])
 
 priors <- ("
   repMean ~ dbeta(1,1)
