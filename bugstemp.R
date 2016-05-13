@@ -1,9 +1,14 @@
-priors <- (" 
+# args <- c("fitting/jags.R", "observation/NB.R", "process/P.R")
+
+args <- commandArgs(trailingOnly = T)
+sapply(args, source)
+
+priors <- ("
   repMean ~ dbeta(1,1)
 	effprop ~ dbeta(100,35)
 	initDis ~ dbeta(1,1)
   Ndis ~ dgamma(1,1)
-	
+
 	## This may be a bad prior
 	R0 ~ dgamma(3,1)
 
