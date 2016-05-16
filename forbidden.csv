@@ -1,4 +1,4 @@
 fitting, observation, process
-*,P,*
-*,NB,*
-nimble,*,*
+hyb,BB,*
+hyb,B,*
+hyb,NB,*
