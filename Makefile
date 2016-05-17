@@ -109,6 +109,10 @@ MODSN := $(words $(ALLMODELS))
 clean-models:
 	rm *.$(BUG)
 
+
+
+#### ML does not know how pbs works
+
 # force user to setup some local environmental variables
 # used as defaults in pbs scripts
 .myhpc:
