@@ -19,7 +19,7 @@ iList <- lme4:::namedList(effprop=0.7
   , repMean=0.5
 )
 
-if( type[1] == "hyb"){
+if( type[1] == "dis"){
   if(type[2] == "BB"){
     data <- c(data, lme4:::namedList(pSISize=repSize, eps))
     iList <- c(iList, lme4:::namedList(pSIa=sim$pSI,pSIb=sim$pSI))
