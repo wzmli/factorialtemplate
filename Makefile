@@ -1,7 +1,6 @@
 ## Hooks
 
-helloword:
-	@echo helloword
+testt: allmodels
 
 target: allruns.pbs
 
