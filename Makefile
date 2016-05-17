@@ -9,6 +9,7 @@ target: allruns.pbs
 EMPTY :=
 SPACE := $(EMPTY) $(EMPTY)
 BUG := bug
+ROUT := Rout
 
 # so we have one directory per factorial dimension
 # could, BUT DO NOT WANT TO, have `make` dynamically figure these out
@@ -79,6 +80,16 @@ ALLMODELS += $(1).$(BUG)
 
 endef
 
+# run
+define fit
+$(1).$(ROUT): jags.R dat.R $(1).$(BUG)
+	$(R) $$^ > $$@
+
+ALLMODELS += $(1).$(ROUT)
+
+endef
+
+
 # now we apply our rule generation template to all combinations
 # of all factor dimensions: nested foreach loops, one level
 # for each dimension, and an innermost invocation of template
@@ -102,12 +113,14 @@ endef
 
 $(foreach combo,$(shell cat combinations.txt),$(eval $(call model-template-filtered,$(combo))))
 
+$(foreach combo,$(shell cat combinations.txt),$(eval $(call fit,$(combo))))
+
 allmodels: combinations.txt $(ALLMODELS)
 
 MODSN := $(words $(ALLMODELS))
 
 clean-models:
-	rm *.$(BUG)
+	rm *.$(BUG) *.$(ROUT)
 
 
 
