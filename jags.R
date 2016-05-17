@@ -57,6 +57,6 @@ system.time(JagsModel <- jags(data=data,
 
 print(JagsModel)
 
-saveRDS(JagsModel,file=paste(type[1],type[2],type3sep[1],".RDS"))
+saveRDS(JagsModel,file=paste(type[1],type[2],type3sep[1],"RDS",sep = "."))
 # 
 # # rdsave(JagsDiscrete)
