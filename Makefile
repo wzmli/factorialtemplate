@@ -37,7 +37,7 @@ R := /usr/bin/env Rscript
 # i.e., the actual assembled file names, space separated
 # its made by feeding the forbidden combinations (forbidden.csv)
 # and the directories to a combination building script
-combinations.txt: combinato.R forbidden.csv $(FITS) $(OBSS) $(PROS)
+combinations.txt: combinato.R forbidden.csv $(FITS) $(PROS) $(OBSS)
 	$(R) $^ > $@
 
 # we also have various samples we want to consider in each of these
