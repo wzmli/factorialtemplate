@@ -4,6 +4,7 @@ require(R2jags)
 args <- commandArgs(trailingOnly = T)
 source(args[1])
 type <- unlist(strsplit(args[2],"[_]"))
+type3sep <- unlist(strsplit(type[3],"[.]"))
 
 mult <- 1:4
 data <- lme4:::namedList(obs=sim$Iobs
@@ -46,7 +47,7 @@ params <- c("R0","effprop","repMean")
 
 # list.samplers(Jagsmod)
 
-system.time(JagsDiscrete <- jags(data=data,
+system.time(JagsModel <- jags(data=data,
                 inits=inits,
                 param = params,
                 model.file = args[2],
@@ -54,6 +55,8 @@ system.time(JagsDiscrete <- jags(data=data,
                 n.chains = length(inits))
             )
 
-print(JagsDiscrete)
+print(JagsModel)
+
+saveRDS(JagsModel,file=paste(type[1],type[2],type3sep[1],".RDS"))
 # 
 # # rdsave(JagsDiscrete)
