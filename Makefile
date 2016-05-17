@@ -21,7 +21,7 @@ FITDIR := fitting
 OBSDIR := observation
 PRODIR := process
 
-DIMDIRS := $(FITDIR) $(OBSDIR) $(PRODIR)
+DIMDIRS := $(FITDIR) $(PRODIR) $(OBSDIR)
 
 # we want to dependencies related to all of the points in those dimensions
 # and we track those points with a file for each

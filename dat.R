@@ -12,6 +12,7 @@ numobs <- 15
 iterations=4000
 
 Pdis=2
+obsdis=2
 Ndis=2
 seed=1001
 
