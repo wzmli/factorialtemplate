@@ -27,8 +27,8 @@ DIMDIRS := $(FITDIR) $(OBSDIR) $(PRODIR)
 # and we track those points with a file for each
 
 FITS := $(wildcard $(FITDIR)/*)
-OBSS := $(wildcard $(OBSDIR)/*)
 PROS := $(wildcard $(PRODIR)/*)
+OBSS := $(wildcard $(OBSDIR)/*)
 
 R := /usr/bin/env Rscript
 
