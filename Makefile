@@ -64,7 +64,7 @@ endef
 
 define nim.fit
 nim.$(1).$(ROUT): nimble.R dat.R $(1).$(NIM)
-	$(R) $$^ > $$@
+	 $(R) $$^ > $$@
 
 NIMALLMODELS += nim.$(1).$(ROUT)
 
@@ -83,7 +83,7 @@ allnim: combinations.txt $(NIMALLMODELS)
 MODSN := $(words $(JAGSALLMODELS))
 
 clean-models:
-	rm *.$(BUG) *.$(ROUT) *.$(NIM)
+	rm *.$(BUG) *.$(ROUT) *.$(NIM) *.RDS
 
 
 

@@ -1,7 +1,8 @@
 library(nimble)
+# args <- c("dat.R","dis_BB_BB.nimR")
 
 args <- commandArgs(trailingOnly = T)
-print(args)
+
 source(args[1])
 source(args[2])
 type <- unlist(strsplit(args[2],"[_]"))
@@ -32,14 +33,14 @@ if(type[3] == "BB.nimR"){
   niminits <- c(niminits, lme4:::namedList(repobsa=repMean, repobsb=repMean))
 }
 }
-
+ 
 params <- c("R0","effprop","repMean")
 
-# nimmod <- nimbleModel(code=nimcode,constants=nimCBcon, data=nimCBdata,
-#                       inits=nimCBinits)
+# nimmod <- nimbleModel(code=nimcode,constants=nimcon, data=nimdata,
+#                       inits=niminits)
 # aa <- configureMCMC(nimmod,print=TRUE)
 # 
-# # nimble is not picking up the conjugate beta priors for nimble
+# nimble is not picking up the conjugate beta priors for nimble
 FitModel <- MCMCsuite(code=nimcode,
                       data=nimdata,
                       inits=niminits,
