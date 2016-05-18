@@ -1,3 +1,7 @@
+#Simple instructions
+- make (create combination.txt)
+- make alljags/allnim (will make template, fit results, fit object)
+
 First define folders and wildcards
 
 model-filename is creating the file name with the pieces.
@@ -8,6 +12,7 @@ model-filename is creating the file name with the pieces.
 - Not sure about the model-template function
 - model-template-filtered takes bugstemp.R **arguments** and run it
 - ALLMODELS defined as all the created templates
-- Running make forloop
+- Running make forloops for making template and fitting
+
 - Stop here! not sure how the pbs works
 
