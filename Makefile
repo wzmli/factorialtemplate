@@ -67,25 +67,25 @@ define model-template
 $(call model-filename,$(1),$(2),$(3)): bugstemp.R $(1) $(2) $(3)
 	$(R) $$^ > $$@
 
-ALLMODELS += $(call model-filename,$(1),$(2),$(3))
+JAGSALLMODELS += $(call model-filename,$(1),$(2),$(3))
 
 endef
 
 # using filtered factorial instead
-define model-template-filtered
+define jags.model-template-filtered
 $(1).$(BUG): bugstemp.R $(addsuffix .R,$(join $(DIMDIRS),$(addprefix /,$(subst _, ,$(1)))))
 	$(R) $$^ > $$@
 
-ALLMODELS += $(1).$(BUG)
+JAGSALLMODELS += $(1).$(BUG)
 
 endef
 
 # run
-define fit
+define jags.fit
 jags.$(1).$(ROUT): jags.R dat.R $(1).$(BUG)
 	$(R) $$^ > $$@
 
-ALLMODELS += jags.$(1).$(ROUT)
+JAGSALLMODELS += jags.$(1).$(ROUT)
 
 endef
 
@@ -111,13 +111,13 @@ endef
 #    $(eval $(call model-template,$(fit),$(obs),$(pro)))\
 # )))
 
-$(foreach combo,$(shell cat combinations.txt),$(eval $(call model-template-filtered,$(combo))))
+$(foreach combo,$(shell cat combinations.txt),$(eval $(call jags.model-template-filtered,$(combo))))
 
-$(foreach combo,$(shell cat combinations.txt),$(eval $(call fit,$(combo))))
+$(foreach combo,$(shell cat combinations.txt),$(eval $(call jags.fit,$(combo))))
 
-allmodels: combinations.txt $(ALLMODELS)
+allmodels: combinations.txt $(JAGSALLMODELS)
 
-MODSN := $(words $(ALLMODELS))
+MODSN := $(words $(JAGSALLMODELS))
 
 clean-models:
 	rm *.$(BUG) *.$(ROUT)
