@@ -58,6 +58,8 @@ jags.$(1).$(ROUT): jags.R dat.R $(1).$(BUG)
 	$(R) $$^ > $$@
 
 
+JAGSALLMODELS += jags.$(1).$(ROUT)
+
 endef
 
 define nim.fit

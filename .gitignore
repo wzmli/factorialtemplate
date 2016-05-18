@@ -7,3 +7,4 @@ pbs-params.csv
 combinations.txt
 *.Rout
 *.nimR
+*.RDS

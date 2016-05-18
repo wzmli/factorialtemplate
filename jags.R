@@ -1,4 +1,4 @@
-require(R2jags)
+library(R2jags)
 # options(mc.cores = parallel::detectCores())
 
 args <- commandArgs(trailingOnly = T)

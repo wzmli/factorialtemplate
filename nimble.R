@@ -1,4 +1,4 @@
-require(nimble)
+library(nimble)
 
 args <- commandArgs(trailingOnly = T)
 print(args)
