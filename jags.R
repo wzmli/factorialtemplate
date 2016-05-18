@@ -18,6 +18,8 @@ iList <- lme4:::namedList(effprop=0.7
   , N0
   , initDis=0.2
   , repMean=0.5
+  , Ndis = 2
+  , Nmean = 1
 )
 
 if( type[1] == "dis"){
