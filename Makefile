@@ -1,6 +1,6 @@
 ## Hooks
 
-testt: allmodels
+testt: alljags
 
 target: allruns.pbs
 
@@ -9,13 +9,8 @@ target: allruns.pbs
 EMPTY :=
 SPACE := $(EMPTY) $(EMPTY)
 BUG := bug
+NIM := nimR
 ROUT := Rout
-
-# so we have one directory per factorial dimension
-# could, BUT DO NOT WANT TO, have `make` dynamically figure these out
-# do not want b/c: transparency
-# slight walkback: would be useful to have a dimensions dir, with
-# each dimension a sub dir
 
 FITDIR := fitting
 OBSDIR := observation
@@ -23,60 +18,37 @@ PRODIR := process
 
 DIMDIRS := $(FITDIR) $(PRODIR) $(OBSDIR)
 
-# we want to dependencies related to all of the points in those dimensions
-# and we track those points with a file for each
-
 FITS := $(wildcard $(FITDIR)/*)
 PROS := $(wildcard $(PRODIR)/*)
 OBSS := $(wildcard $(OBSDIR)/*)
 
 R := /usr/bin/env Rscript
 
-# this file has all the legal combinations, written as
-# A_B_C B_B_2
-# i.e., the actual assembled file names, space separated
-# its made by feeding the forbidden combinations (forbidden.csv)
-# and the directories to a combination building script
 combinations.txt: combinato.R forbidden.csv $(FITS) $(PROS) $(OBSS)
 	$(R) $^ > $@
-
-# we also have various samples we want to consider in each of these
-# factorial dimensions.  these are another dimension in some sense,
-# but since we use them in a fundamentally different way we will
-# treat them seperately
 
 SAMPDIR := samples
 SAMPS := $(wildcard $(SAMPDIR)/*)
 SAMPN := $(words $(SAMPS))
 
-# our factorial combination inputs are each a file
-# and the file names include each dimension value as part of the name
-# i.e., 'DIM1VAL_DIM2VAL_DIM3VAL.$(BUG)'
-# we make that naming easy to use (and enforce) by defining a function for it
+jags.model-filename = $(subst $(SPACE),_,$(basename $(notdir $(1) $(2) $(3)))).$(BUG)
 
-model-filename = $(subst $(SPACE),_,$(basename $(notdir $(1) $(2) $(3)))).$(BUG)
+nim.model-filename = $(subst $(SPACE),_,$(basename $(notdir $(1) $(2) $(3)))).$(NIM)
 
-# finally we want to dynamically generate a rule for each target
-# it would be nice to use pattern rules, but matching multiple patterns
-# doesn't work nicely.  However, the pattern for the rules is simple, so we
-# define a function for writing a rule from inputs
-# Having a variable that is the complete model list is convenient,
-# so we can append to such a variable every time a new rule is written
-
-define model-template
-$(call model-filename,$(1),$(2),$(3)): bugstemp.R $(1) $(2) $(3)
-	$(R) $$^ > $$@
-
-JAGSALLMODELS += $(call model-filename,$(1),$(2),$(3))
-
-endef
-
-# using filtered factorial instead
+# using filtered factorial
 define jags.model-template-filtered
 $(1).$(BUG): bugstemp.R $(addsuffix .R,$(join $(DIMDIRS),$(addprefix /,$(subst _, ,$(1)))))
 	$(R) $$^ > $$@
 
 JAGSALLMODELS += $(1).$(BUG)
+
+endef
+
+define nim.model-template-filtered
+$(1).$(NIM): bugstemp.R $(addsuffix .R,$(join $(DIMDIRS),$(addprefix /,$(subst _, ,$(1)))))
+	$(R) $$^ > $$@
+
+NIMALLMODELS += $(1).$(NIM)
 
 endef
 
@@ -89,33 +61,23 @@ JAGSALLMODELS += jags.$(1).$(ROUT)
 
 endef
 
+define nim.fit
+nim.$(1).$(ROUT): nimble.R dat.R $(1).$(ROUT)
+	$(R) $$^ > $$@
 
-# now we apply our rule generation template to all combinations
-# of all factor dimensions: nested foreach loops, one level
-# for each dimension, and an innermost invocation of template
-# to each of loop variables
-# n.b., it's important to do $(eval $(call ...))
-# $(call ...) creates the appropriate string
-# but $(eval ...) takes that string and includes it in the make definitions
-# WARNING: THIS NEST LOOP IS PARSED EVERYTIME `make` IS INVOKED
-# so for a factorial design that includes many, large dimensions, should prefer to
-# have these rules built once (and rebuilt only when necessary), rather than dynamically
-# for each `make ...` call.  Clever way to do that might be to have
-# a to-be-included .mk file which is (re)built based on
-# directory contents, then always included?
+NIMALLMODELS += nim.$(1).$(ROUT)
 
-# TODO define this, so it there can be a single line comment / switch
-# $(foreach fit,$(FITS),\
-#  $(foreach obs,$(OBSS),\
-#   $(foreach pro,$(PROS),\
-#    $(eval $(call model-template,$(fit),$(obs),$(pro)))\
-# )))
+endef
 
 $(foreach combo,$(shell cat combinations.txt),$(eval $(call jags.model-template-filtered,$(combo))))
-
 $(foreach combo,$(shell cat combinations.txt),$(eval $(call jags.fit,$(combo))))
 
-allmodels: combinations.txt $(JAGSALLMODELS)
+$(foreach combo,$(shell cat combinations.txt),$(eval $(call nim.model-template-filtered,$(combo))))
+$(foreach combo,$(shell cat combinations.txt),$(eval $(call nim.fit,$(combo))))
+
+alljags: combinations.txt $(JAGSALLMODELS)
+allnim: combinations.txt $(NIMALLMODELS)
+
 
 MODSN := $(words $(JAGSALLMODELS))
 
