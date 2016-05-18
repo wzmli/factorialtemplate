@@ -7,9 +7,6 @@ source(args[2])
 type <- unlist(strsplit(args[2],"[_]"))
 type3sep <- unlist(strsplit(type[3],"[.]"))
 
-print(type)
-print(type2sep)
-
 ##options(mc.cores = parallel::detectCores())
 nimbleOptions(verifyConjugatePosteriors=TRUE)
 nimdata <- lme4:::namedList(obs=sim$Iobs)
@@ -57,5 +54,5 @@ FitModel <- MCMCsuite(code=nimcode,
 
 print(FitModel$summary)
 
-saveRDS(FitModel,file=paste(type[1],type[2],type2sep[1],"nim","RDS",sep = "."))
+saveRDS(FitModel,file=paste(type[1],type[2],type3sep[1],"nim","RDS",sep = "."))
 
