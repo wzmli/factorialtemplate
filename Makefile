@@ -45,7 +45,7 @@ JAGSALLMODELS += $(1).$(BUG)
 endef
 
 define nim.model-template-filtered
-$(1).$(NIM): bugstemp.R $(addsuffix .R,$(join $(DIMDIRS),$(addprefix /,$(subst _, ,$(1)))))
+$(1).$(NIM): nimbletemp.R $(addsuffix .R,$(join $(DIMDIRS),$(addprefix /,$(subst _, ,$(1)))))
 	$(R) $$^ > $$@
 
 NIMALLMODELS += $(1).$(NIM)
