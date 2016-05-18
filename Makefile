@@ -82,10 +82,10 @@ endef
 
 # run
 define fit
-$(1).$(ROUT): jags.R dat.R $(1).$(BUG)
+jags.$(1).$(ROUT): jags.R dat.R $(1).$(BUG)
 	$(R) $$^ > $$@
 
-ALLMODELS += $(1).$(ROUT)
+ALLMODELS += jags.$(1).$(ROUT)
 
 endef
 

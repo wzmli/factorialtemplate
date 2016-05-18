@@ -47,7 +47,7 @@ params <- c("R0","effprop","repMean")
 
 # list.samplers(Jagsmod)
 
-system.time(JagsModel <- jags(data=data,
+system.time(FitModel <- jags(data=data,
                 inits=inits,
                 param = params,
                 model.file = args[2],
@@ -55,8 +55,8 @@ system.time(JagsModel <- jags(data=data,
                 n.chains = length(inits))
             )
 
-print(JagsModel)
+print(FitModel)
 
-saveRDS(JagsModel,file=paste(type[1],type[2],type3sep[1],"RDS",sep = "."))
+saveRDS(FitModel,file=paste(type[1],type[2],type3sep[1],"RDS",sep = "."))
 # 
 # # rdsave(JagsDiscrete)
