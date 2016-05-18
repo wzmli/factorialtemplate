@@ -57,12 +57,11 @@ define jags.fit
 jags.$(1).$(ROUT): jags.R dat.R $(1).$(BUG)
 	$(R) $$^ > $$@
 
-JAGSALLMODELS += jags.$(1).$(ROUT)
 
 endef
 
 define nim.fit
-nim.$(1).$(ROUT): nimble.R dat.R $(1).$(ROUT)
+nim.$(1).$(ROUT): nimble.R dat.R $(1).$(NIM)
 	$(R) $$^ > $$@
 
 NIMALLMODELS += nim.$(1).$(ROUT)
@@ -82,7 +81,7 @@ allnim: combinations.txt $(NIMALLMODELS)
 MODSN := $(words $(JAGSALLMODELS))
 
 clean-models:
-	rm *.$(BUG) *.$(ROUT)
+	rm *.$(BUG) *.$(ROUT) *.$(NIM)
 
 
 
