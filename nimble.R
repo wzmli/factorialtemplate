@@ -1,5 +1,5 @@
 library(nimble)
-# args <- c("dat.R","hyb_BB_P.nimR")
+# args <- c("dat.R","hyb_B_P.nimR")
 
 args <- commandArgs(trailingOnly = T)
 
@@ -24,8 +24,8 @@ if(type[2] == "BB"){
   niminits <- c(niminits, lme4:::namedList(pSIa=sim$pSI,pSIb=sim$pSI))
 }
 if(type[2] == "NB"){
-    nimcon <- c(nimcon, lme4:::namedList(Pdis,eps))
-    niminits <- c(niminits, lme4:::namedList(IMean=sim$I))
+    nimcon <- c(nimcon, lme4:::namedList(eps))
+    niminits <- c(niminits, lme4:::namedList(IMean=sim$I,Pdis))
 }
 
 if(type[3] == "BB.nimR"){
@@ -34,10 +34,24 @@ if(type[3] == "BB.nimR"){
 }
 }
  
+
+if(type[1] == "hyb"){
+  if(type[2] == "BB"){
+    nimdata <- c(nimdata,lme4:::namedList(Pdis))
+    # nimcon <- c(nimcon, lme4:::namedList(Pdis=repSize))
+    niminits <- c(niminits, lme4:::namedList(x=sim$pSI,y=sim$pSI))
+  }
+  if(type[2] == "NB"){
+    nimdata <- c(nimdata,lme4:::namedList(Pdis))
+    nimcon <- c(nimcon, lme4:::namedList(eps))
+  }
+}
+  
+  
 params <- c("R0","effprop","repMean")
 
-nimmod <- nimbleModel(code=nimcode,constants=nimcon, data=nimdata,
-                      inits=niminits)
+# nimmod <- nimbleModel(code=nimcode,constants=nimcon, data=nimdata,
+#                       inits=niminits)
 # aa <- configureMCMC(nimmod,print=TRUE)
 # 
 # nimble is not picking up the conjugate beta priors for nimble
