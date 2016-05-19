@@ -1,7 +1,6 @@
 #!/bin/bash
-
-for PROC_DIST in BB B P NB; do
-   for OBS_DIST BB B P NB; do
-      make dis_$PROC_DIST_$OBS_DIST.Rout
-    done
+for PROC in BB B P NB; do
+  for OBS in BB B P NB; do
+    make nim.dis.$PROC.$OBS.Rout
+  done
 done

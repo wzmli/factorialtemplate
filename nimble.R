@@ -1,13 +1,12 @@
 library(nimble)
-# args <- c("dat.R","hyb_B_P.nimR")
+# args <- c("dat.R","dis.BB.BB.nimR")
 
 # args <- commandArgs(trailingOnly = T)
 # 
 # source(args[1])
 # source(args[2])
 source(input_files)
-type <- unlist(strsplit(input_files,"[_]"))
-type3sep <- unlist(strsplit(type[3],"[.]"))
+type <- unlist(strsplit(input_files,"[.]"))
 
 ##options(mc.cores = parallel::detectCores())
 nimbleOptions(verifyConjugatePosteriors=TRUE)
@@ -21,7 +20,7 @@ niminits <- lme4:::namedList(I=sim$I,effprop,R0,repMean,N0,
                              initDis=0.2, Ndis=2, Nmean=1)
 if(type[1] == "dis"){
 if(type[2] == "BB"){
-  nimcon <- c(nimcon, lme4:::namedList(pSISize=repSize, eps))
+  nimcon <- c(nimcon, lme4:::namedList(pSISize=repSize,eps))
   niminits <- c(niminits, lme4:::namedList(pSIa=sim$pSI,pSIb=sim$pSI))
 }
 if(type[2] == "NB"){
@@ -29,7 +28,7 @@ if(type[2] == "NB"){
     niminits <- c(niminits, lme4:::namedList(IMean=sim$I,Pdis))
 }
 
-if(type[3] == "BB.nimR"){
+if(type[3] == "BB"){
   nimcon <- c(nimcon, lme4:::namedList(repobsSize=repSize))
   niminits <- c(niminits, lme4:::namedList(repobsa=repMean, repobsb=repMean))
 }
@@ -70,5 +69,5 @@ FitModel <- MCMCsuite(code=nimcode,
 
 print(FitModel$summary)
 
-saveRDS(FitModel,file=paste(type[1],type[2],type3sep[1],"nim","RDS",sep = "."))
+saveRDS(FitModel,file=paste(type[1],type[2],type[3],"nim","RDS",sep = "."))
 
