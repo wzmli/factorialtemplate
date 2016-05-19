@@ -1,12 +1,12 @@
 library(nimble)
 # args <- c("dat.R","dis.BB.BB.nimR")
-# input_files <- "dis_BB_BB.nimR"
+input_files <- "hyb_BB_P.nimR"
 
 # args <- commandArgs(trailingOnly = T)
 # 
 # source(args[1])
 # source(args[2])
-# source("dat.R")
+source("dat.R")
 source(input_files)
 type <- unlist(strsplit(input_files,"[_]"))
 type3sep <- unlist(strsplit(type[3],"[.]"))
@@ -62,7 +62,8 @@ FitModel <- MCMCsuite(code=nimcode,
                       data=nimdata,
                       inits=niminits,
                       constants=nimcon,
-                      MCMCs=c("jags","nimble","nimble_slice"),
+                      stan_model="hybrid.stan",
+                      MCMCs=c("stan"),
                       monitors=params,
                       calculateEfficiency=TRUE,
                       niter=iterations,
@@ -71,5 +72,5 @@ FitModel <- MCMCsuite(code=nimcode,
 
 print(FitModel$summary)
 
-saveRDS(FitModel,file=paste(type[1],type[2],type3sep[1],"nim","RDS",sep = "."))
+# saveRDS(FitModel,file=paste(type[1],type[2],type3sep[1],"nim","RDS",sep = "."))
 

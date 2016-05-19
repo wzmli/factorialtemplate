@@ -9,7 +9,7 @@ eps <-0.0001
 initDis <- 0.1
 N0 <- round(N*effprop)
 numobs <- 15
-iterations=20000
+iterations=2000
 
 Pdis=2
 obsdis=2
