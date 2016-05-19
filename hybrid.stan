@@ -17,7 +17,7 @@ real <lower=0.001> Ndis;
 real <lower=0> i0;
 }
 transformed parameters{
-real <lower=0> beta;
+real <lower=0.0001> beta;
 beta <- exp(-R0/N0);
 
 }
@@ -41,11 +41,11 @@ obs[1] ~ poisson(repMean*I[1]);
 
 for (t in 2:numobs) {
   kappa[t-1] <- (x[t-1]+y[t-1]+1)/(y[t-1]*(x[t-1]+y[t-1]+S[t-1]));
-  SIGshape[t-1] <- S[t-1]*x[t-1]*kappa[t-1] + eps;
+  SIGshape[t-1] <- S[t-1]*x[t-1]*kappa[t-1];
   SIGrate[t-1] <- (x[t-1]+y[t-1])*kappa[t-1];
   print("kappa=",kappa);
   I[t] ~ gamma(SIGshape[t-1],SIGrate[t-1]);
-  pSI[t] <- 1 - exp(I[t]*log(beta));
+  pSI[t] <- 1 - exp(I[t]*log(beta)+eps);
   x[t] <- Pdis/(1-pSI[t]); 
   y[t] <- Pdis/(pSI[t]);
   S[t] <- S[t-1] - I[t];

@@ -66,7 +66,7 @@ FitModel <- MCMCsuite(code=nimcode,
                       MCMCs=c("stan"),
                       monitors=params,
                       calculateEfficiency=TRUE,
-                      niter=iterations,
+                      niter=2000,
                       makePlot=FALSE,
                       savePlot=FALSE)
 
