@@ -82,6 +82,9 @@ allnim: combinations.txt $(NIMALLMODELS)
 nim.%.Rout: dat.R %.nimR nimble.R
 	$(run-R)
 
+nimdis: allnim
+	bash run_dis_nim
+
 MODSN := $(words $(JAGSALLMODELS))
 
 clean-models:
