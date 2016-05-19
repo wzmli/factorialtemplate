@@ -1,10 +1,12 @@
 library(nimble)
-# args <- c("dat.R","dis.BB.BB.nimR")
+# args <- c("dat.R","hyb.BB.P.nimR")
+# input_files <- "hyb.BB.P.nimR"
 
 # args <- commandArgs(trailingOnly = T)
 # 
 # source(args[1])
 # source(args[2])
+# source("dat.R")
 source(input_files)
 type <- unlist(strsplit(input_files,"[.]"))
 
@@ -39,7 +41,7 @@ if(type[1] == "hyb"){
   if(type[2] == "BB"){
     nimdata <- c(nimdata,lme4:::namedList(Pdis))
     # nimcon <- c(nimcon, lme4:::namedList(Pdis=repSize))
-    niminits <- c(niminits, lme4:::namedList(x=sim$pSI,y=sim$pSI))
+    # niminits <- c(niminits, lme4:::namedList(x=sim$pSI,y=sim$pSI))
   }
   if(type[2] == "NB"){
     nimdata <- c(nimdata,lme4:::namedList(Pdis))

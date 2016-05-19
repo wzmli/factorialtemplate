@@ -33,7 +33,7 @@ SAMPN := $(words $(SAMPS))
 
 jags.model-filename = $(subst $(SPACE),_,$(basename $(notdir $(1) $(2) $(3)))).$(BUG)
 
-nim.model-filename = $(subst $(SPACE),.,$(basename $(notdir $(1) $(2) $(3)))).$(NIM)
+nim.model-filename = $(subst $(SPACE),_,$(basename $(notdir $(1) $(2) $(3)))).$(NIM)
 
 # using filtered factorial
 define jags.model-template-filtered
@@ -45,7 +45,7 @@ JAGSALLMODELS += $(1).$(BUG)
 endef
 
 define nim.model-template-filtered
-$(1).$(NIM): nimbletemp.R $(addsuffix .R,$(join $(DIMDIRS),$(addprefix /,$(subst ., ,$(1)))))
+$(1).$(NIM): nimbletemp.R $(addsuffix .R,$(join $(DIMDIRS),$(addprefix /,$(subst _, ,$(1)))))
 	$(R) $$^ > $$@
 
 NIMALLMODELS += $(1).$(NIM)
@@ -85,7 +85,7 @@ nim.%.Rout: dat.R %.nimR nimble.R
 MODSN := $(words $(JAGSALLMODELS))
 
 clean-models:
-	rm *.$(BUG) *.$(ROUT) *.$(NIM) *.RDS
+	rm *.$(BUG) *.$(ROUT) *.$(NIM) *.RDS *.Rlog *.wrapR.r *.rout
 
 
 

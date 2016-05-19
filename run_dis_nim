@@ -1,6 +1,6 @@
 #!/bin/bash
 for PROC in BB B P NB; do
   for OBS in BB B P NB; do
-    make nim.dis.$PROC.$OBS.Rout
+    make nim.dis_${PROC}_${OBS}.Rout
   done
 done
