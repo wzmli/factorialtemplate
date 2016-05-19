@@ -64,7 +64,7 @@ endef
 
 define nim.fit
 nim.$(1).$(ROUT): nimble.R dat.R $(1).$(NIM)
-	 $(R) $$^ > $$@
+	 R CMD BATCH nimble.R $$^ >$$@
 
 NIMALLMODELS += nim.$(1).$(ROUT)
 
@@ -74,11 +74,13 @@ $(foreach combo,$(shell cat combinations.txt),$(eval $(call jags.model-template-
 $(foreach combo,$(shell cat combinations.txt),$(eval $(call jags.fit,$(combo))))
 
 $(foreach combo,$(shell cat combinations.txt),$(eval $(call nim.model-template-filtered,$(combo))))
-$(foreach combo,$(shell cat combinations.txt),$(eval $(call nim.fit,$(combo))))
+## $(foreach combo,$(shell cat combinations.txt),$(eval $(call nim.fit,$(combo))))
 
 alljags: combinations.txt $(JAGSALLMODELS)
 allnim: combinations.txt $(NIMALLMODELS)
 
+nim.%.Rout: dat.R %.nimR nimble.R
+	$(run-R)
 
 MODSN := $(words $(JAGSALLMODELS))
 
@@ -175,3 +177,4 @@ Sources += $(wildcard *.R)
 -include $(ms)/linux.mk
 -include $(ms)/wrapR.mk
 -include rmd.mk
+

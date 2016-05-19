@@ -8,3 +8,9 @@ combinations.txt
 *.Rout
 *.nimR
 *.RDS
+*.RData
+*.pdf
+*.Rlog
+*.rout
+makestuff/
+*.[r]

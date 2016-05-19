@@ -1,11 +1,12 @@
 library(nimble)
 # args <- c("dat.R","hyb_B_P.nimR")
 
-args <- commandArgs(trailingOnly = T)
-
-source(args[1])
-source(args[2])
-type <- unlist(strsplit(args[2],"[_]"))
+# args <- commandArgs(trailingOnly = T)
+# 
+# source(args[1])
+# source(args[2])
+source(input_files)
+type <- unlist(strsplit(input_files,"[_]"))
 type3sep <- unlist(strsplit(type[3],"[.]"))
 
 ##options(mc.cores = parallel::detectCores())
