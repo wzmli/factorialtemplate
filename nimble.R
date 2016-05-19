@@ -66,8 +66,7 @@ FitModel <- MCMCsuite(code=nimcode,
                       calculateEfficiency=TRUE,
                       niter=iterations,
                       makePlot=FALSE,
-                      savePlot=FALSE,
-                      setSeed=5)
+                      savePlot=FALSE)
 
 print(FitModel$summary)
 

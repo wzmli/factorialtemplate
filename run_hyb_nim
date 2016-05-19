@@ -1,0 +1,6 @@
+#!/bin/bash
+for PROC in BB B P NB; do
+  for OBS in P; do
+    make nim.hyb_${PROC}_${OBS}.Rout
+  done
+done
