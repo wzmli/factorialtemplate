@@ -1,6 +1,6 @@
 library(nimble)
-# args <- c("dat.R","hyb.BB.P.nimR")
-# input_files <- "hyb.BB.P.nimR"
+# args <- c("dat.R","dis.BB.BB.nimR")
+# input_files <- "dis_BB_BB.nimR"
 
 # args <- commandArgs(trailingOnly = T)
 # 
@@ -8,7 +8,8 @@ library(nimble)
 # source(args[2])
 # source("dat.R")
 source(input_files)
-type <- unlist(strsplit(input_files,"[.]"))
+type <- unlist(strsplit(input_files,"[_]"))
+type3sep <- unlist(strsplit(type[3],"[.]"))
 
 ##options(mc.cores = parallel::detectCores())
 nimbleOptions(verifyConjugatePosteriors=TRUE)
@@ -30,7 +31,7 @@ if(type[2] == "NB"){
     niminits <- c(niminits, lme4:::namedList(IMean=sim$I,Pdis))
 }
 
-if(type[3] == "BB"){
+if(type[3] == "BB.nimR"){
   nimcon <- c(nimcon, lme4:::namedList(repobsSize=repSize))
   niminits <- c(niminits, lme4:::namedList(repobsa=repMean, repobsb=repMean))
 }
@@ -70,5 +71,5 @@ FitModel <- MCMCsuite(code=nimcode,
 
 print(FitModel$summary)
 
-saveRDS(FitModel,file=paste(type[1],type[2],type[3],"nim","RDS",sep = "."))
+saveRDS(FitModel,file=paste(type[1],type[2],type3sep[1],"nim","RDS",sep = "."))
 
