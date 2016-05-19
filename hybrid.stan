@@ -17,7 +17,7 @@ real <lower=0.001> Ndis;
 real <lower=0> i0;
 }
 transformed parameters{
-real <lower=0.0001> beta;
+real <lower=0.0000000001> beta;
 beta <- exp(-R0/N0);
 
 }
@@ -43,7 +43,7 @@ for (t in 2:numobs) {
   kappa[t-1] <- (x[t-1]+y[t-1]+1)/(y[t-1]*(x[t-1]+y[t-1]+S[t-1]));
   SIGshape[t-1] <- S[t-1]*x[t-1]*kappa[t-1];
   SIGrate[t-1] <- (x[t-1]+y[t-1])*kappa[t-1];
-  print("pSI=",pSI," beta=",beta," I=",I);
+  print(" pSI=",pSI);
   I[t] ~ gamma(SIGshape[t-1],SIGrate[t-1]);
   pSI[t] <- 1 - exp(I[t]*log(beta))+eps;
   x[t] <- Pdis/(1-pSI[t]); 
