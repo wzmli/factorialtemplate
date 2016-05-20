@@ -76,7 +76,7 @@ $(foreach combo,$(shell cat combinations.txt),$(eval $(call jags.model-template-
 $(foreach combo,$(shell cat combinations.txt),$(eval $(call jags.fit,$(combo))))
 
 $(foreach combo,$(shell cat combinations.txt),$(eval $(call nim.model-template-filtered,$(combo))))
-## $(foreach combo,$(shell cat combinations.txt),$(eval $(call nim.fit,$(combo))))
+$(foreach combo,$(shell cat combinations.txt),$(eval $(call nim.fit,$(combo))))
 
 alljags: combinations.txt $(JAGSALLMODELS)
 allnim: combinations.txt $(NIMALLMODELS)
