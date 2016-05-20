@@ -1,4 +1,5 @@
 library(nimble)
+library(methods)
 # args <- c("dat.R","dis.BB.BB.nimR")
 # input_files <- "hyb_BB_P.nimR"
 
