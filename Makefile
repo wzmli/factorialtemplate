@@ -66,7 +66,7 @@ endef
 
 define nim.fit
 nim.$(1).$(ROUT): nimble.R dat.R $(1).$(NIM)
-	 $(R) nimble.R $$^ >$$@
+	 $(R) $$^ >$$@
 
 NIMALLMODELS += nim.$(1).$(ROUT)
 

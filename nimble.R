@@ -3,15 +3,14 @@ library(methods)
 # args <- c("dat.R","dis.BB.BB.nimR")
 # input_files <- "hyb_BB_P.nimR"
 
-# args <- commandArgs(trailingOnly = T)
-# 
-# source(args[1])
-# source(args[2])
-type <- unlist(strsplit(input_files,"[_]"))
+args <- commandArgs(trailingOnly = T)
+
+
+type <- unlist(strsplit(args[2],"[_]"))
 type4sep <- unlist(strsplit(type[4],"[.]"))
 seed <- type4sep[1]
-source("dat.R")
-source(input_files)
+source(args[1])
+source(args[2])
 
 ##options(mc.cores = parallel::detectCores())
 nimbleOptions(verifyConjugatePosteriors=TRUE)
