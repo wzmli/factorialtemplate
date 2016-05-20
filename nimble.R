@@ -1,6 +1,8 @@
-library(nimble)
 library(methods)
-# args <- c("dat.R","dis.BB.BB.nimR")
+library(coda)
+library(nimble)
+
+# args <- c("dat.R","dis_BB_BB_1.nimR")
 # input_files <- "hyb_BB_P.nimR"
 
 args <- commandArgs(trailingOnly = T)
@@ -11,7 +13,7 @@ type4sep <- unlist(strsplit(type[4],"[.]"))
 seed <- type4sep[1]
 source(args[1])
 source(args[2])
-
+# iterations=2000
 ##options(mc.cores = parallel::detectCores())
 nimbleOptions(verifyConjugatePosteriors=TRUE)
 nimdata <- lme4:::namedList(obs=sim$Iobs)
@@ -72,5 +74,5 @@ FitModel <- MCMCsuite(code=nimcode,
 
 print(FitModel$summary)
 
-# saveRDS(FitModel,file=paste(type[1],type[2],type3sep[1],"nim","RDS",sep = "."))
+saveRDS(FitModel,file=paste(type[1],type[2],type[3],type4sep[1],"nim","RDS",sep = "."))
 
