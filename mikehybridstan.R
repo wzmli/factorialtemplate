@@ -15,7 +15,7 @@ inits <- list(list(I=c(1,3,4,12,37,140,537,764,1755,1893,975,570,173,53,7)
               ,Nmean=100))
 sim <- stan(file="hybrid.stan",data=data,init=inits,
              pars=c("R0"),
-             iter=500,
+             iter=200,
              chains=1)
 
 print(sim)

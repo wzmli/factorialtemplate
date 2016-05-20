@@ -33,9 +33,9 @@ N0 ~ gamma(Ndis,Ndis/effprop*N);
 
 I[1] ~ gamma(i0,1);
 S[1] <- N0 - I[1];
-pSI[1] <- 1 - exp(I[1]*log(beta)) + eps;
-x[1] <- Pdis/(1-pSI[1]);
-y[1] <- Pdis/(pSI[1]);
+pSI[1] <- 1 - exp(I[1]*log(beta)) ;
+x[1] <- Pdis/(1-pSI[1]+eps);
+y[1] <- Pdis/(pSI[1]+eps);
 obs[1] ~ poisson(repMean*I[1]);
 
 
@@ -45,9 +45,9 @@ for (t in 2:numobs) {
   SIGrate[t-1] <- (x[t-1]+y[t-1])*kappa[t-1];
   print(" pSI=",pSI);
   I[t] ~ gamma(SIGshape[t-1],SIGrate[t-1]);
-  pSI[t] <- 1 - exp(I[t]*log(beta))+eps;
-  x[t] <- Pdis/(1-pSI[t]); 
-  y[t] <- Pdis/(pSI[t]);
+  pSI[t] <- 1 - exp(log(beta)*I[t]);
+  x[t] <- Pdis/(1-pSI[t]+eps); 
+  y[t] <- Pdis/(pSI[t]+eps);
   S[t] <- S[t-1] - I[t];
   obs[t] ~ poisson(repMean*I[t]);
   }
