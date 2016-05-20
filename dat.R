@@ -14,7 +14,7 @@ iterations=2000
 Pdis=2
 obsdis=2
 Ndis=2
-seed=1001
+seed=seed
 
 
 rbbinom <- function(n, prob, k, size){

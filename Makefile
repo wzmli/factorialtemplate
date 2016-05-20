@@ -15,16 +15,18 @@ ROUT := Rout
 FITDIR := fitting
 OBSDIR := observation
 PRODIR := process
+SEEDDIR := seeds
 
-DIMDIRS := $(FITDIR) $(PRODIR) $(OBSDIR)
+DIMDIRS := $(FITDIR) $(PRODIR) $(OBSDIR) $(SEEDDIR)
 
 FITS := $(wildcard $(FITDIR)/*)
 PROS := $(wildcard $(PRODIR)/*)
 OBSS := $(wildcard $(OBSDIR)/*)
+SEEDS := $(wildcard $(SEEDDIR)/*)
 
 R := /usr/bin/env Rscript
 
-combinations.txt: combinato.R forbidden.csv $(FITS) $(PROS) $(OBSS)
+combinations.txt: combinato.R forbidden.csv $(FITS) $(PROS) $(OBSS) $(SEEDS)
 	$(R) $^ > $@
 
 SAMPDIR := samples

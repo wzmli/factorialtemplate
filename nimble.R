@@ -1,15 +1,16 @@
 library(nimble)
 # args <- c("dat.R","dis.BB.BB.nimR")
-input_files <- "hyb_BB_P.nimR"
+# input_files <- "hyb_BB_P.nimR"
 
 # args <- commandArgs(trailingOnly = T)
 # 
 # source(args[1])
 # source(args[2])
+type <- unlist(strsplit(input_files,"[_]"))
+type4sep <- unlist(strsplit(type[4],"[.]"))
+seed <- type4sep[1]
 source("dat.R")
 source(input_files)
-type <- unlist(strsplit(input_files,"[_]"))
-type3sep <- unlist(strsplit(type[3],"[.]"))
 
 ##options(mc.cores = parallel::detectCores())
 nimbleOptions(verifyConjugatePosteriors=TRUE)
@@ -31,25 +32,25 @@ if(type[2] == "NB"){
     niminits <- c(niminits, lme4:::namedList(IMean=sim$I,Pdis))
 }
 
-if(type[3] == "BB.nimR"){
+if(type[3] == "BB"){
   nimcon <- c(nimcon, lme4:::namedList(repobsSize=repSize))
   niminits <- c(niminits, lme4:::namedList(repobsa=repMean, repobsb=repMean))
 }
 }
  
-
-if(type[1] == "hyb"){
-  if(type[2] == "BB"){
-    nimdata <- c(nimdata,lme4:::namedList(Pdis))
-    # nimcon <- c(nimcon, lme4:::namedList(Pdis=repSize))
-    # niminits <- c(niminits, lme4:::namedList(x=sim$pSI,y=sim$pSI))
-  }
-  if(type[2] == "NB"){
-    nimdata <- c(nimdata,lme4:::namedList(Pdis))
-    nimcon <- c(nimcon, lme4:::namedList(eps))
-  }
-}
-  
+# 
+# if(type[1] == "hyb"){
+#   if(type[2] == "BB"){
+#     nimdata <- c(nimdata,lme4:::namedList(Pdis))
+#     # nimcon <- c(nimcon, lme4:::namedList(Pdis=repSize))
+#     # niminits <- c(niminits, lme4:::namedList(x=sim$pSI,y=sim$pSI))
+#   }
+#   if(type[2] == "NB"){
+#     nimdata <- c(nimdata,lme4:::namedList(Pdis))
+#     nimcon <- c(nimcon, lme4:::namedList(eps))
+#   }
+# }
+#   
   
 params <- c("R0","effprop","repMean")
 
@@ -62,11 +63,10 @@ FitModel <- MCMCsuite(code=nimcode,
                       data=nimdata,
                       inits=niminits,
                       constants=nimcon,
-                      stan_model="hybrid.stan",
-                      MCMCs=c("stan"),
+                      MCMCs=c("jags","nimble","nimble_slice"),
                       monitors=params,
                       calculateEfficiency=TRUE,
-                      niter=2000,
+                      niter=iterations,
                       makePlot=FALSE,
                       savePlot=FALSE)
 

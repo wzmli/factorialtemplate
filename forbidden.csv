@@ -1,4 +1,5 @@
-fitting, process, observation
-hyb,*,BB
-hyb,*,B
-hyb,*,NB
+fitting, process, observation, seeds
+hyb,*,BB,*
+hyb,*,B,*
+hyb,*,NB,*
+hyb,*,P,*
