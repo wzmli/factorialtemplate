@@ -24,21 +24,21 @@ nimcon <- lme4:::namedList(numobs
 
 niminits <- lme4:::namedList(I=sim$I,effprop,R0,repMean,N0, 
                              initDis=0.2, Ndis=2, Nmean=1)
-# if(type[1] == "dis"){
-# if(type[2] == "BB"){
-#   nimcon <- c(nimcon, lme4:::namedList(pSISize=repSize,eps))
-#   niminits <- c(niminits, lme4:::namedList(pSIa=sim$pSI,pSIb=sim$pSI))
-# }
-# if(type[2] == "NB"){
-#     nimcon <- c(nimcon, lme4:::namedList(eps))
-#     niminits <- c(niminits, lme4:::namedList(IMean=sim$I,Pdis))
-# }
-# 
-# if(type[3] == "BB"){
-#   nimcon <- c(nimcon, lme4:::namedList(repobsSize=repSize))
-#   niminits <- c(niminits, lme4:::namedList(repobsa=repMean, repobsb=repMean))
-# }
-# }
+if(type[1] == "dis"){
+if(type[2] == "BB"){
+  nimcon <- c(nimcon, lme4:::namedList(pSISize=repSize,eps))
+  niminits <- c(niminits, lme4:::namedList(pSIa=sim$pSI,pSIb=sim$pSI))
+}
+if(type[2] == "NB"){
+    nimcon <- c(nimcon, lme4:::namedList(eps))
+    niminits <- c(niminits, lme4:::namedList(IMean=sim$I,Pdis))
+}
+
+if(type[3] == "BB"){
+  nimcon <- c(nimcon, lme4:::namedList(repobsSize=repSize))
+  niminits <- c(niminits, lme4:::namedList(repobsa=repMean, repobsb=repMean))
+}
+}
  
 # 
 if(type[1] == "hyb"){
