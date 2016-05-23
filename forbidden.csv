@@ -1,5 +1,8 @@
 fitting, process, observation, seeds
+dis,*,BB,*
+dis,*,B,*
+dis,*,NB,*
+dis,*,P,*
 hyb,*,BB,*
 hyb,*,B,*
 hyb,*,NB,*
-hyb,*,P,*
