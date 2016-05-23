@@ -49,7 +49,7 @@ if(type[1] == "hyb"){
   }
   if(type[2] == "NB"){
     nimdata <- c(nimdata,lme4:::namedList(Pdis))
-    nimcon <- c(nimcon, lme4:::namedList(eps))
+    # nimcon <- c(nimcon, lme4:::namedList(eps))
   }
 }
   

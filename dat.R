@@ -1,15 +1,15 @@
-R0 <- 2.5
+R0 <- 2
 N <- 10000
-i0 <- 1
-effprop <- 0.75
-repMean <- 0.25
+i0 <- 2
+effprop <- 0.70
+repMean <- 0.4
 repSize <- 5
 
 eps <-0.0001
 initDis <- 0.1
 N0 <- round(N*effprop)
 numobs <- 15
-iterations=20000
+iterations=10000
 
 Pdis=2
 obsdis=2

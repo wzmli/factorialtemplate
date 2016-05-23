@@ -10,13 +10,13 @@ if(type == "hyb"){
 }
 
 priors <- c("
-            repMean ~ dbeta(1,1)
+            repMean ~ dbeta(70,100)
             effprop ~ dbeta(100,35)
             initDis ~ dbeta(1,1)
             Ndis ~ dgamma(1,1)
             
             ## This may be a bad prior
-            R0 ~ dunif(0,10)
+            R0 ~ dunif(0,5)
             Nmean ~ dgamma(Ndis,Ndis/effprop*N)
             N0 ~ dpois(Nmean)
             "
