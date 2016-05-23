@@ -1,7 +1,7 @@
 library(nimble)
 library(coda)
 
-filenames <- list.files(pattern="RDS")
+filenames <- list.files(pattern="nim.RDS")
 
 temp <- head(filenames)
 getsum <- function(n){
