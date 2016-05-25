@@ -17,7 +17,7 @@ priors <- c("
             
             ## This may be a bad prior
             R0 ~ dunif(0,5)
-            Nmean ~ dgamma(Ndis,Ndis/effprop*N)
+            Nmean ~ dgamma(Ndis,Ndis/(effprop*N))
             N0 ~ dpois(Nmean)
             "
 )

@@ -31,7 +31,7 @@ getsum <- function(n){
                        , process=name[2]
                        , observation=name[3]
                        , parameter=rep(c("R0","effprop","repMean","Effprop*rep"),each=3)
-                       , true_parameter=rep(c(2.5,0.75,0.25,0.1875),each=3)
+                       , true_parameter=rep(c(2,0.7,0.4,0.28),each=3)
                        , tempdf
                        , platform=rep(c("jags","nimble","nimble_slice"),4)
                        , timing=c(rep(c(nimbleobject$timing[1:3]),3),NA,NA,NA)
