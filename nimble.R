@@ -2,7 +2,7 @@ library(methods)
 library(coda)
 library(nimble)
 
-# args <- c("dat.R","dis_BB_BB_1.nimR")
+# args <- c("dat.R","hyb_P_P_01.nimR","stantemplate.R")
 # input_files <- "hyb_BB_P.nimR"
 
 args <- commandArgs(trailingOnly = T)
@@ -51,6 +51,7 @@ if(type[1] == "hyb"){
     nimdata <- c(nimdata,lme4:::namedList(Pdis))
     # nimcon <- c(nimcon, lme4:::namedList(eps))
   }
+  source(args[3])
 }
   
   
@@ -65,7 +66,8 @@ FitModel <- MCMCsuite(code=nimcode,
                       data=nimdata,
                       inits=niminits,
                       constants=nimcon,
-                      MCMCs=c("jags","nimble","nimble_slice"),
+                      MCMCs=c("jags","nimble","nimble_slice","stan"),
+                      stan_model=stanmod,
                       monitors=params,
                       calculateEfficiency=TRUE,
                       niter=iterations,
