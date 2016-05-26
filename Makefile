@@ -65,7 +65,7 @@ JAGSALLMODELS += jags.$(1).$(ROUT)
 endef
 
 define nim.fit
-nim.$(1).$(ROUT): nimble.R dat.R $(1).$(NIM)
+nim.$(1).$(ROUT): nimble.R dat.R $(1).$(NIM) stantemplate.R
 	 $(R) $$^ >$$@
 
 NIMALLMODELS += nim.$(1).$(ROUT)
