@@ -6,3 +6,6 @@ dis,*,NB,*
 hyb,*,BB,*
 hyb,*,B,*
 hyb,*,NB,*
+hyb,B,P,*
+hyb,BB,P,*
+hyb,NB,P,*
