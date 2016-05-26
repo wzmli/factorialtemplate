@@ -14,6 +14,7 @@ iterations=10000
 Pdis=2
 obsdis=2
 Ndis=2
+Nmean=2
 seed=seed
 
 

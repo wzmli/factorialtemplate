@@ -5,49 +5,35 @@ int N;
 real eps;
 }
 parameters {
-real <lower=0.01,upper=10> R0;
-real <lower=0,upper=0.9> repMean;
-real <lower=0,upper=1> effprop;
-real <lower=0,upper=1> initDis;
+real <lower=0.01,upper=4> R0;
+real <lower=0.1,upper=0.5> repMean;
+real <lower=0.5,upper=0.9> effprop;
 real <lower=0> I[numobs];
 real  <lower=0> N0;
 real <lower=0,upper=N> Nmean;
-real <lower=0.001> Pdis;
-real <lower=0.001> Ndis;
 real <lower=0> i0;
-}
-transformed parameters{
-real <lower=0.0000000001> beta;
-beta <- exp(-R0/N0);
-
+real <lower=0> Ndis;
 }
 model {
 vector[numobs] S;
-vector[numobs] pSI;
-vector[numobs-1] SIGshape;
-vector[numobs-1]SIGrate;
-vector[numobs] x;
-vector[numobs] y;
-vector[numobs-1] kappa;
-N0 ~ gamma(Ndis,Ndis/effprop*N);
-
-I[1] ~ gamma(i0,1);
+vector[numobs-1] pSI;
+vector[numobs] Imean;
+real BETA;
+Nmean ~ gamma(fmax(Ndis,eps),Ndis/(effprop*N));
+N0 ~ gamma(Nmean,1);
+BETA <- exp(-R0/N0);
+effprop ~ beta(100,35);
+repMean ~ beta(70,100);
+Imean[1] <- fmax((1-BETA)*N0,eps);
+I[1] ~ gamma(Imean[1],1);
 S[1] <- N0 - I[1];
-pSI[1] <- 1 - exp(I[1]*log(beta)) ;
-x[1] <- Pdis/(1-pSI[1]+eps);
-y[1] <- Pdis/(pSI[1]+eps);
 obs[1] ~ poisson(repMean*I[1]);
 
 
 for (t in 2:numobs) {
-  kappa[t-1] <- (x[t-1]+y[t-1]+1)/(y[t-1]*(x[t-1]+y[t-1]+S[t-1]));
-  SIGshape[t-1] <- S[t-1]*x[t-1]*kappa[t-1];
-  SIGrate[t-1] <- (x[t-1]+y[t-1])*kappa[t-1];
-  print(" pSI=",pSI);
-  I[t] ~ gamma(SIGshape[t-1],SIGrate[t-1]);
-  pSI[t] <- 1 - exp(log(beta)*I[t]);
-  x[t] <- Pdis/(1-pSI[t]+eps); 
-  y[t] <- Pdis/(pSI[t]+eps);
+  pSI[t-1] <- 1 - BETA^I[t-1];
+  Imean[t] <- fmax(pSI[t-1]*S[t-1],eps);
+  I[t] ~ gamma(Imean[t],1);;
   S[t] <- S[t-1] - I[t];
   obs[t] ~ poisson(repMean*I[t]);
   }
