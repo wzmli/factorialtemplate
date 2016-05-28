@@ -150,7 +150,7 @@ if(type[2] == "B"){
       , file = paste(type[2],type[3],seed,"data.R",sep=".")
   )
   
-  #NB process
+  #B process
   cat("data {
       int<lower=0> numobs; // number of data points
       int obs[numobs]; // response
