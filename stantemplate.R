@@ -14,6 +14,7 @@ cat("obs = c(",sim$Iobs[1],sub("",",",sim$Iobs[-1]),")"
     , file = paste(type[2],type[3],seed,"data.R",sep=".")
 )
 
+#poisson process
 cat("data {
 int<lower=0> numobs; // number of data points
     int obs[numobs]; // response
@@ -35,6 +36,7 @@ int<lower=0> numobs; // number of data points
     vector[numobs-1] pSI;
     vector[numobs] Imean;
     real BETA;
+    Ndis ~ uniform(0,100)
     Nmean ~ gamma(fmax(Ndis,eps),Ndis/(effprop*N));
     N0 ~ gamma(Nmean,1);
     BETA <- exp(-R0/N0);
