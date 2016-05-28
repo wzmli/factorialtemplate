@@ -90,7 +90,7 @@ nimdis: allnim
 MODSN := $(words $(JAGSALLMODELS))
 
 clean-models:
-	rm *.$(BUG) *.$(ROUT) *.$(NIM) *.RDS *.Rlog *.wrapR.r *.rout
+	rm *.$(BUG) *.$(ROUT) *.$(NIM) *.RDS *.Rlog *.wrapR.r *.rout *.init.R *.data.R *.stan
 
 
 
