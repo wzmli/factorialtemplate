@@ -38,7 +38,7 @@ int<lower=0> numobs; // number of data points
     vector[numobs-1] pSI;
     vector[numobs] Imean;
     real BETA;
-    Ndis ~ uniform(0,100)
+    Ndis ~ uniform(0,100);
     effprop ~ beta(100,35);
     repMean ~ beta(70,100);
     Nmean ~ gamma(fmax(Ndis,eps),Ndis/(effprop*N));
@@ -53,7 +53,7 @@ int<lower=0> numobs; // number of data points
     for (t in 2:numobs) {
     pSI[t-1] <- 1 - BETA^I[t-1];
     Imean[t] <- fmax(pSI[t-1]*S[t-1],eps);
-    I[t] ~ gamma(Imean[t],1);;
+    I[t] ~ gamma(Imean[t],1);
     S[t] <- S[t-1] - I[t];
     obs[t] ~ poisson(repMean*I[t]);
     }
