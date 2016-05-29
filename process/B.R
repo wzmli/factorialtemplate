@@ -2,7 +2,7 @@ process <- c("B"
   , "
     I[1] ~ dbin(initDis,i0)
     beta <- exp(-R0/N0)
-	  pSI[1] <- 1 - exp(I[1]*log(beta))
+	  pSI[1] <- 1 - beta
   "
   , "
     I[t] ~ dbin(pSI[t-1],S[t-1])

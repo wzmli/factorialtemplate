@@ -2,7 +2,7 @@ library(methods)
 library(coda)
 library(nimble)
 
-# args <- c("dat.R","dis_NB_NB_23.nimR","stantemplate.R")
+# args <- c("dat.R","dis_NB_NB_01.nimR","stantemplate.R")
 # input_files <- "hyb_BB_P.nimR"
 
 args <- commandArgs(trailingOnly = T)
@@ -20,17 +20,18 @@ nimdata <- lme4:::namedList(obs=sim$Iobs)
 nimcon <- lme4:::namedList(numobs
                            , N
                            , i0
+                           , eps
 )
 
 niminits <- lme4:::namedList(I=sim$I,effprop,R0,repMean,N0, 
                              initDis=0.2, Ndis=2, Nmean=1)
 if(type[1] == "dis"){
 if(type[2] == "BB"){
-  nimcon <- c(nimcon, lme4:::namedList(pSISize=repSize,eps))
+  nimcon <- c(nimcon, lme4:::namedList(pSISize=repSize))
   niminits <- c(niminits, lme4:::namedList(pSIa=sim$pSI,pSIb=sim$pSI))
 }
 if(type[2] == "NB"){
-    nimcon <- c(nimcon, lme4:::namedList(eps))
+    # nimcon <- c(nimcon, lme4:::namedList(eps))
     niminits <- c(niminits, lme4:::namedList(IMean=sim$I,Pdis))
 }
 

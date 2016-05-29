@@ -1,8 +1,8 @@
 observation <- c("P"
   , "
-  obs[1] ~ dpois(I[1]*repMean)
+  obs[1] ~ dpois(I[1]*repMean+eps)
   "
   , 
-    "obs[t] ~ dpois(I[t]*repMean)
+    "obs[t] ~ dpois(I[t]*repMean+eps)
 "
 )

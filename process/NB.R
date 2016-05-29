@@ -1,10 +1,10 @@
 process <- c("NB"
   , "
-    Pdis ~ dgamma(1,1)
+    Pdis ~ dunif(1,100)
 	  IMean[1] ~ dgamma(Pdis,Pdis/(initDis*i0))
     I[1] ~ dpois(IMean[1])
     beta <- exp(-R0/N0)
-	  pSI[1] <- 1 - exp(I[1]*log(beta))
+	  pSI[1] <- 1 - beta
   "
   , "
     IMean[t] ~ dgamma(Pdis,Pdis/(pSI[t-1]*S[t-1] + eps))
