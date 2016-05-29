@@ -3,4 +3,6 @@ hyb,*,BB,*
 hyb,*,B,*
 hyb,*,NB,*
 hyb,*,P,*
-dis,BB,*,*
+dis,B,*,*
+dis,P,*,*
+dis,NB,*,*

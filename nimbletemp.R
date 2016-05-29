@@ -13,10 +13,10 @@ priors <- c("
             repMean ~ dbeta(70,100)
             effprop ~ dbeta(100,35)
             initDis ~ dbeta(1,1)
-            Ndis ~ dunif(0,100)
+            Ndis ~ dunif(0.1,100)
             
             ## This may be a bad prior
-            R0 ~ dunif(0,5)
+            R0 ~ dunif(0.1,5)
             Nmean ~ dgamma(Ndis,Ndis/(effprop*N))
             N0 ~ dpois(Nmean)
             "
