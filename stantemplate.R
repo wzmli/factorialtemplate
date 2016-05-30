@@ -209,7 +209,7 @@ if(type[2] == "BB"){
       , "\n" , "R0 =", R0
       , "\n" , "repMean = ", repMean
       , "\n" , "Nmean = ", Nmean
-      , file = paste(type[2],"_",type[3],"_",seed,".init.R",sep="")
+      , file = paste(type[2],type[3],seed,"init.R",sep=".")
   )
   
   cat("obs = c(",sim$Iobs[1],sub("",",",sim$Iobs[-1]),")"
@@ -217,7 +217,7 @@ if(type[2] == "BB"){
       , "\n" , "numobs =", numobs
       , "\n" , "i0 = ", i0
       , "\n" , "eps = ", eps
-      , file = paste(type[2],"_",type[3],"_",seed,".data.R",sep="")
+      , file = paste(type[2],type[3],seed,"data.R",sep=".")
   )
   
   #BB process
@@ -273,8 +273,8 @@ S[t] <- S[t-1] - I[t];
 obs[t] ~ poisson(repMean*I[t]);
 }
 }"
-    , file = paste(type[2],"_",type[3],"_",seed,".stan",sep="")
+    , file = paste(type[2],type[3],seed,"stan",sep=".")
 )
 
-stanmod = paste(type[2],"_",type[3],"_",seed,".stan",sep="")
+stanmod = file = paste(type[2],type[3],seed,"stan",sep=".")
 }
