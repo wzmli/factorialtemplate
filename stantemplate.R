@@ -220,7 +220,7 @@ if(type[2] == "BB"){
       , file = paste(type[2],type[3],seed,"data.R",sep=".")
   )
   
-  #B process
+  #BB process
   cat("data {
       int<lower=0> numobs; // number of data points
       int obs[numobs]; // response
@@ -235,15 +235,20 @@ real <lower=0.5,upper=0.9> effprop;
 real <lower=0> I[numobs];
 real  <lower=0> N0;
 real <lower=0,upper=N> Nmean;
+real <lower=0> Pdis;
 real <lower=0> Ndis;
 }
 model {
 vector[numobs] S;
 vector[numobs-1] pSI;
+vector[numobs-1] x;
+vector[numobs-1] y;
+vector[numobs-1] kappa;
 vector[numobs] Imean;
 vector[numobs-1] SIGshape;
 vector[numobs-1] SIGrate;
 real BETA;
+Pdis ~ uniform(0.1,100);
 Ndis ~ uniform(0.1,100);
 effprop ~ beta(100,35);
 repMean ~ beta(70,100);
@@ -258,8 +263,11 @@ obs[1] ~ poisson(repMean*I[1]);
 
 for (t in 2:numobs) {
 pSI[t-1] <- 1 - BETA^I[t-1];
-SIGrate[t-1] <- 1/(1-pSI[t-1] + eps);
-SIGshape[t-1] <- pSI[t-1]*S[t-1]*SIGrate[t-1];
+x[t-1] <- Pdis/(1-pSI[t-1]);
+y[t-1] <- Pdis/pSI[t-1];
+kappa[t-1] <- (x[t-1]+y[t-1]+1)/(y[t-1]*(x[t-1]+y[t-1]+S[t-1]));
+SIGrate[t-1] <- (x[t-1]+y[t-1])*kappa[t-1];
+SIGshape[t-1] <- S[t-1]*x[t-1]*kappa[t-1];
 I[t] ~ gamma(fmax(SIGshape[t-1],eps),fmax(SIGrate[t-1],eps));
 S[t] <- S[t-1] - I[t];
 obs[t] ~ poisson(repMean*I[t]);
