@@ -244,7 +244,6 @@ vector[numobs-1] pSI;
 vector[numobs-1] x;
 vector[numobs-1] y;
 vector[numobs-1] kappa;
-vector[numobs] Imean;
 vector[numobs-1] SIGshape;
 vector[numobs-1] SIGrate;
 real BETA;
@@ -263,8 +262,8 @@ obs[1] ~ poisson(repMean*I[1]);
 
 for (t in 2:numobs) {
 pSI[t-1] <- 1 - BETA^I[t-1];
-x[t-1] <- Pdis/(1-pSI[t-1]);
-y[t-1] <- Pdis/pSI[t-1];
+x[t-1] <- Pdis/(1-pSI[t-1]+eps);
+y[t-1] <- Pdis/(pSI[t-1]+eps);
 kappa[t-1] <- (x[t-1]+y[t-1]+1)/(y[t-1]*(x[t-1]+y[t-1]+S[t-1]));
 SIGrate[t-1] <- (x[t-1]+y[t-1])*kappa[t-1];
 SIGshape[t-1] <- S[t-1]*x[t-1]*kappa[t-1];
