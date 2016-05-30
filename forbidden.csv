@@ -2,7 +2,10 @@ fitting, process, observation, seeds
 hyb,*,BB,*
 hyb,*,B,*
 hyb,*,NB,*
-hyb,*,P,*
+hyb,NB,P,*
+hyb,BB,P,*
+hyb,P,P,*
 dis,B,*,*
 dis,P,*,*
 dis,NB,*,*
+dis,BB,*,*
