@@ -8,33 +8,28 @@ getsum <- function(n){
   nimbleobject <- readRDS(n)
   name <- unlist(strsplit(n,"[.]"))
   # type/process/observation/sample/nim/RDS
-  sam <- nimbleobject$samples
-  prod1sam <- sam["jags","effprop",] * sam["jags","repMean",]
-  prod2sam <- sam["nimble","effprop",] * sam["nimble","repMean",]
-  prod3sam <- sam["nimble_slice","effprop",] * sam["nimble_slice","repMean",]
-  class(prod1sam) <- class(prod2sam) <- class(prod3sam) <- "mcmc"
-  proddf <- data.frame(mean=c(mean(prod1sam),mean(prod2sam),mean(prod3sam))
-                       , median=c(median(prod1sam),median(prod2sam),median(prod3sam))
-                       , sd=c(sd(prod1sam),sd(prod2sam),sd(prod3sam))
-                       , CI95_low=c(HPDinterval(prod1sam)[,1],HPDinterval(prod2sam)[,1],HPDinterval(prod3sam)[,1])
-                       , CI95_upp=c(HPDinterval(prod1sam)[,2],HPDinterval(prod2sam)[,2],HPDinterval(prod3sam)[,2])
-                       , n=length(prod1sam)
-                       , ess = NA
-                       , efficiency= NA)
   sum_output <- nimbleobject$summary
-  sumdf <- rbind(sum_output[,,1],sum_output[,,2],sum_output[,,3])
-  rownames(sum) <- NULL
+  if(name[1]=="dis"){
+    sumdf <- rbind(sum_output[,,1],sum_output[,,2],sum_output[,,3])
+    nplat <- 3
+    temp_platform <- rep(c("jags","nimble","nimble_slice"),3)
+  }
+  if(name[1]=="hyb"){
+    sumdf <- rbind(sum_output[,,1],sum_output[,,2],sum_output[,,3],sum_output[,,4]) 
+    nplat <- 4
+    temp_platform <- rep(c("jags","nimble","nimble_slice","stan"),3)
+  }
+  rownames(sumdf) <- NULL
   sumdf <- data.frame(sumdf)
-  tempdf <- rbind(sumdf,proddf)
   fulldf <- data.frame(sample=name[4]
                        , type=name[1]
                        , process=name[2]
                        , observation=name[3]
-                       , parameter=rep(c("R0","effprop","repMean","Effprop*rep"),each=3)
-                       , true_parameter=rep(c(2,0.7,0.4,0.28),each=3)
-                       , tempdf
-                       , platform=rep(c("jags","nimble","nimble_slice"),4)
-                       , timing=c(rep(c(nimbleobject$timing[1:3]),3),NA,NA,NA)
+                       , parameter=rep(c("R0","effprop","repMean"),each=nplat)
+                       , true_parameter=rep(c(2,0.7,0.4),each=nplat)
+                       , sumdf
+                       , platform=temp_platform
+                       , timing=c(rep(c(nimbleobject$timing[1:nplat]),3))
   )
 }
 
