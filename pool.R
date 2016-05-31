@@ -15,7 +15,7 @@ getsum <- function(n){
     temp_platform <- rep(c("jags","nimble","nimble_slice"),3)
   }
   if(name[1]=="hyb"){
-    sumdf <- rbind(sum_output[,,1],sum_output[,,2],sum_output[,,3],sum_output[,,4]) 
+    sumdf <- rbind(sum_output[,,1],sum_output[,,2],sum_output[,,3]) 
     nplat <- 4
     temp_platform <- rep(c("jags","nimble","nimble_slice","stan"),3)
   }
@@ -43,4 +43,4 @@ combineDat <- function(nlist){
 
 dat <- combineDat(filenames)
 
-#saveRDS(dat,file="dis1.RDS")
+#saveRDS(dat,file="dis.RDS")
