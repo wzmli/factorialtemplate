@@ -45,15 +45,15 @@ int<lower=0> numobs; // number of data points
     N0 ~ gamma(Nmean,1);
     BETA <- exp(-R0/N0);
     Imean[1] <- fmax((1-BETA)*N0,eps);
-    I[1] ~ gamma(Imean[1],1);
-    S[1] <- N0 - I[1];
-    obs[1] ~ poisson(repMean*I[1]);
+    I[1] ~ gamma(Imean[1],1/repMean);
+    S[1] <- N0/repMean - I[1];
+    obs[1] ~ poisson(I[1]);
     
     
     for (t in 2:numobs) {
     pSI[t-1] <- 1 - BETA^I[t-1];
     Imean[t] <- fmax(pSI[t-1]*S[t-1],eps);
-    I[t] ~ gamma(Imean[t],1);
+    I[t] ~ gamma(Imean[t],1/repMean);
     S[t] <- S[t-1] - I[t];
     obs[t] ~ poisson(repMean*I[t]);
     }
@@ -180,19 +180,19 @@ repMean ~ beta(70,100);
 Nmean ~ gamma(fmax(Ndis,eps),Ndis/(effprop*N));
 N0 ~ gamma(Nmean,1);
 
-I[1] ~ gamma(i0,1);
+I[1] ~ gamma(i0,1/repMean);
 BETA <- exp(-R0/N0);
-S[1] <- N0 - I[1];
-obs[1] ~ poisson(repMean*I[1]);
+S[1] <- N0*repMean - I[1];
+obs[1] ~ poisson(I[1]);
 
 
 for (t in 2:numobs) {
 pSI[t-1] <- 1 - BETA^I[t-1];
 SIGrate[t-1] <- 1/(1-pSI[t-1] + eps);
-SIGshape[t-1] <- pSI[t-1]*S[t-1]*SIGrate[t-1];
+SIGshape[t-1] <- pSI[t-1]*S[t-1]*SIGrate[t-1]/repMean;
 I[t] ~ gamma(fmax(SIGshape[t-1],eps),fmax(SIGrate[t-1],eps));
 S[t] <- S[t-1] - I[t];
-obs[t] ~ poisson(repMean*I[t]);
+obs[t] ~ poisson(I[t]);
 }
 }"
     , file = paste(type[2],type[3],seed,"stan",sep=".")
