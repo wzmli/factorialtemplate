@@ -2,7 +2,7 @@ library(methods)
 library(coda)
 library(nimble)
 
-# args <- c("dat.R","hyb_BB_P_11.nimR","stantemplate.R")
+# args <- c("dat.R","hyb_B_P_01.nimR","stantemplate.R")    Only use this to debug/step through
 # input_files <- "hyb_BB_P.nimR"
 
 args <- commandArgs(trailingOnly = T)
