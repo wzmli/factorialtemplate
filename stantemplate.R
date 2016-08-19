@@ -26,8 +26,8 @@ int<lower=0> numobs; // number of data points
     }
     parameters {
     real <lower=0> R0;
-    real <lower=0.1,upper=0.5> repMean;
-    real <lower=0.5,upper=0.9> effprop;
+    real <lower=0,upper=1> repMean;
+    real <lower=0,upper=1> effprop;
     real <lower=0> I[numobs];
     real  <lower=0> N0;
     real <lower=0,upper=N> Nmean;
@@ -39,8 +39,8 @@ int<lower=0> numobs; // number of data points
     vector[numobs] Imean;
     real BETA;
     Ndis ~ uniform(0,100);
-    effprop ~ beta(100,35);
-    repMean ~ beta(70,100);
+    effprop ~ beta(1,1);
+    repMean ~ beta(1,1);
     R0 ~ gamma(0.1,0.1);
     Nmean ~ gamma(fmax(Ndis,eps),Ndis/(effprop*N));
     N0 ~ gamma(Nmean,1);

@@ -10,8 +10,8 @@ if(type == "hyb"){
 }
 
 priors <- c("
-            repMean ~ dbeta(70,100)
-            effprop ~ dbeta(100,35)
+            repMean ~ dbeta(1,1)
+            effprop ~ dbeta(1,1)
             initDis ~ dbeta(1,1)
             Ndis ~ dunif(0.1,100)
             
