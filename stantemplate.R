@@ -25,7 +25,7 @@ int<lower=0> numobs; // number of data points
     real eps;
     }
     parameters {
-    real <lower=0.01,upper=4> R0;
+    real <lower=0> R0;
     real <lower=0.1,upper=0.5> repMean;
     real <lower=0.5,upper=0.9> effprop;
     real <lower=0> I[numobs];
@@ -41,6 +41,7 @@ int<lower=0> numobs; // number of data points
     Ndis ~ uniform(0,100);
     effprop ~ beta(100,35);
     repMean ~ beta(70,100);
+    R0 ~ gamma(0.1,0.1);
     Nmean ~ gamma(fmax(Ndis,eps),Ndis/(effprop*N));
     N0 ~ gamma(Nmean,1);
     BETA <- exp(-R0/N0);
